@@ -1,0 +1,37 @@
+{
+  "reference_video": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+  "revision": "M1-R2",
+  "original_transparent_sprites": 0,
+  "files": [
+    {
+      "file": "frame-0010.jpg",
+      "sha256": "d392dd4f84ec5031f9a52007cbf4767833ec3ecfc1fb2eb9079372b29290f7be",
+      "source": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+      "type": "unmodified video reference frame; region selected when rendering"
+    },
+    {
+      "file": "rabbit-reference-m1-r2.jpg",
+      "sha256": "fd5237f5811ff1a202bf4d4630e1c9a9502c91169f49f74dc143781d68e3f95d",
+      "source": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+      "type": "unmodified video reference frame; region selected when rendering"
+    },
+    {
+      "file": "fox-reference-m1-r2.jpg",
+      "sha256": "04c35139e98145a000b2876dfa7aa4205aee566e002deaf742be4a89c73f452a",
+      "source": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+      "type": "unmodified video reference frame; region selected when rendering"
+    },
+    {
+      "file": "frame-0196.jpg",
+      "sha256": "c9131fbf10bfcff3ac0f50fb6c1742e8eebf901e62d9da2e2cb55b8cb563a4fe",
+      "source": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+      "type": "unmodified video reference frame; region selected when rendering"
+    },
+    {
+      "file": "frame-0198.jpg",
+      "sha256": "049c20ab65ed98361a884044ef104c21bc32c0923fb8b6aaf122e51323779e38",
+      "source": "https://www.bilibili.com/video/BV1pqhSeSE9M",
+      "type": "unmodified video reference frame; region selected when rendering"
+    }
+  ]
+}
