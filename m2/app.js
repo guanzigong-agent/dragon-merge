@@ -1,8 +1,9 @@
 (function () {
   'use strict';
   const D=window.DragonDemo,$=id=>document.getElementById(id);
-  const board=new D.PreviewLeaderboard();
-  let scene,items,gesture=null,activeDialog=null,toastTimer,comboTimer;
+  const remote=Boolean(window.DragonLeaderboardConfig?.apiBase);
+  const board=remote?new D.RemoteLeaderboard(window.DragonLeaderboardConfig.apiBase):new D.PreviewLeaderboard();
+  let scene,items,gesture=null,activeDialog=null,toastTimer,comboTimer,rankingLoading=false,rankingError=false,submitting=false;
   const format=value=>value.toLocaleString('zh-CN');
   function toast(message) {
     clearTimeout(toastTimer);$('toast').textContent=message;$('toast').hidden=false;
@@ -27,7 +28,7 @@
     $('item-remove').setAttribute('aria-pressed',String(state.itemTargeting));
     $('item-swap').disabled=blocked||state.itemTargeting;$('item-shake').disabled=blocked||state.itemTargeting;
     $('item-hint').hidden=!state.itemTargeting;$('arena').classList.toggle('targeting',state.itemTargeting);
-    $('stop-score').textContent=format(state.score);$('ranking-score').textContent=format(state.score);$('submit-score').disabled=state.score<=0;
+    $('stop-score').textContent=format(state.score);$('ranking-score').textContent=format(state.score);$('submit-score').disabled=state.score<=0||rankingLoading||submitting;
   }
   function openDialog(dialog,back=null) {
     if(dialog.open)return;
@@ -39,6 +40,7 @@
     activeDialog=dialog;scene.locked=true;scene.setPaused(true);dialog.showModal();scene.emit();
     if(dialog===$('leaderboard-dialog')){
       renderRanks();feedback(scene.score?'输入昵称，模拟提交本局最高成绩。':'先合成获得积分，再提交本局成绩。');
+      if(remote)loadRankings();
     }
   }
   function closeDialog(dialog) {if(dialog.open)dialog.close();}
@@ -96,14 +98,36 @@
         position.textContent=record.rank;player.textContent=record.nickname;points.textContent=format(record.score);mini.append(position,player,points);$('mini-ranks').appendChild(mini);
       }
     });
-    const mine=rows.find(record=>record.isYou);
+    if(!rows.length){const empty=document.createElement('li');empty.className='empty-ranking';empty.textContent=rankingError?'排行榜暂时无法连接，请重试。':rankingLoading?'正在读取共享排行榜…':'还没有人上榜，来拿第一名吧。';$('ranking-list').appendChild(empty);}
+    const mine=board.getMine?board.getMine():rows.find(record=>record.isYou);
     $('my-rank').textContent=mine?'你 · '+mine.nickname+'　　第 '+mine.rank+' 名 / 最高 '+format(mine.score)+' 分':'你还没有上榜，来合成第一只萌兽吧。';
+  }
+  async function loadRankings() {
+    if(rankingLoading)return;
+    rankingLoading=true;rankingError=false;$('ranking-retry').hidden=true;renderRanks();scene.emit();
+    feedback('正在读取共享排行榜…');
+    try{
+      await board.load();$('leaderboard-status').textContent='共享排行榜 · 已联网';
+      document.querySelector('.prototype-label').textContent='M2 · 共享排行榜已联网';
+      if(board.currentNickname&&!$('nickname').value)$('nickname').value=board.currentNickname;
+      feedback(scene.score?'输入昵称，提交本局成绩。':'先合成获得积分，再提交本局成绩。');
+    }catch(error){
+      rankingError=true;$('leaderboard-status').textContent='共享排行榜 · 暂时无法连接';$('ranking-retry').hidden=false;feedback(error.message,'error');
+      document.querySelector('.prototype-label').textContent='M2 · 共享排行榜暂时无法连接';
+    }finally{rankingLoading=false;renderRanks();scene.emit();}
   }
   D.ready.then(()=>{
     if(D.revision!==document.documentElement.dataset.assetRevision)throw new Error('Animal reference revision mismatch');
     scene=new D.FreeScene($('game-canvas'),{update,merge:combo,message:toast,overflow:()=>openDialog($('stop-dialog'))});
     items=new D.Items(scene,toast);D.scene=scene;D.items=items;D.leaderboard=board;
     populateAnimals();renderRanks();scene.emit();
+    if(remote){
+      $('leaderboard-status').textContent='共享排行榜 · 等待连接';$('mini-rank-mode').textContent='共享';$('footer-rank-mode').textContent='共享';$('submit-score').textContent='提交成绩';
+      $('ranking-footnote').textContent='只需填写昵称，最高分自动保留。本浏览器会记住你的身份；换设备或清除浏览器数据后，请使用新昵称。';
+      $('ranking-info-text').textContent='排行榜使用共享成绩，只需填写昵称即可提交。昵称已被使用时，请换一个昵称。';
+      document.querySelector('.prototype-label').textContent='M2 · 共享排行榜';
+      loadRankings();
+    }
     const canvas=$('game-canvas');
     canvas.addEventListener('pointerdown',event=>{
       if(event.button!==0||scene.paused||scene.stopped||activeDialog)return;
@@ -150,10 +174,13 @@
     $('confirm-restart').addEventListener('click',reset);$('cancel-restart').addEventListener('click',()=>closeDialog($('restart-dialog')));
     $('side-source').addEventListener('click',()=>openDialog($('info-dialog')));
     $('continue-item').addEventListener('click',()=>{if(items.revive()){$('stop-dialog').restorePause=false;$('stop-dialog').back=null;closeDialog($('stop-dialog'));}});
-    $('ranking-form').addEventListener('submit',event=>{
-      event.preventDefault();const result=board.submit($('nickname').value,scene.score);
-      feedback(result.message,result.ok?'success':'error');
-      if(result.ok){$('nickname').value=board.currentNickname;renderRanks();}else $('nickname').focus();
+    $('ranking-retry').addEventListener('click',loadRankings);
+    $('ranking-form').addEventListener('submit',async event=>{
+      event.preventDefault();if(submitting||rankingLoading)return;submitting=true;scene.emit();
+      try{
+        const result=await board.submit($('nickname').value,scene.score);feedback(result.message,result.ok?'success':'error');
+        if(result.ok){$('nickname').value=board.currentNickname;renderRanks();}else $('nickname').focus();
+      }finally{submitting=false;scene.emit();}
     });
     $('nickname').addEventListener('input',()=>{$('nickname').setAttribute('aria-invalid','false');$('ranking-feedback').classList.remove('error');});
     for(const dialog of document.querySelectorAll('dialog')){

@@ -1,0 +1,7 @@
+{
+  "name": "dragon-merge-leaderboard",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test test/api.test.mjs" },
+  "engines": { "node": ">=24" }
+}

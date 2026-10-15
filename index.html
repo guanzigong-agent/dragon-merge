@@ -8,13 +8,15 @@
   <meta name="robots" content="noindex,nofollow">
   <title>神龙消消乐 · M2 无限畅玩</title>
   <link rel="stylesheet" href="style.css?v=m1-r2">
-  <link rel="stylesheet" href="m2/style.css?v=m2-r2">
+  <link rel="stylesheet" href="m2/style.css?v=m2-r3">
   <script src="animals.js?v=m1-r2" defer></script>
   <script src="scene.js?v=m1-r2" defer></script>
   <script src="m2/mode.js?v=m2-r2" defer></script>
   <script src="m2/items.js?v=m2-r2" defer></script>
+  <script src="m2/config.js?v=m2-r3" defer></script>
   <script src="m2/leaderboard.js?v=m2-r2" defer></script>
-  <script src="m2/app.js?v=m2-r2" defer></script>
+  <script src="m2/leaderboard-client.js?v=m2-r3" defer></script>
+  <script src="m2/app.js?v=m2-r3" defer></script>
 </head>
 <body>
   <div class="page-heading"><span class="seal">龙</span><span>神龙消消乐</span><span class="edition">M2 · 无限畅玩</span></div>
@@ -25,7 +27,7 @@
       <p class="intro-copy">体力和道具都已放开。<br>为小动物腾个位置，再向神龙前进。</p>
       <div class="free-note"><b>∞</b><div>无限体力 · 无限道具<small>所有玩家采用相同畅玩规则</small></div></div>
       <section class="mini-board" aria-labelledby="mini-board-title">
-        <div class="mini-board-heading"><h3 id="mini-board-title">山间风云榜</h3><span>示例</span></div>
+        <div class="mini-board-heading"><h3 id="mini-board-title">山间风云榜</h3><span id="mini-rank-mode">示例</span></div>
         <ol id="mini-ranks"></ol>
         <button id="side-leaderboard" class="subtle-button">查看完整榜单 ↗</button>
       </section>
@@ -63,7 +65,7 @@
           <button id="item-swap"><span class="item-symbol">⇄</span><span>换下一只</span><b aria-label="无限次">∞</b></button>
           <button id="item-shake"><span class="item-symbol">〰</span><span>摇一摇</span><b aria-label="无限次">∞</b></button>
         </nav>
-        <nav class="quick-tools" aria-label="游戏菜单"><button id="catalog">萌兽图鉴</button><button id="footer-leaderboard">排行榜 <span>示例</span></button><button id="restart">重新开始</button></nav>
+        <nav class="quick-tools" aria-label="游戏菜单"><button id="catalog">萌兽图鉴</button><button id="footer-leaderboard">排行榜 <span id="footer-rank-mode">示例</span></button><button id="restart">重新开始</button></nav>
       </div>
       <p class="prototype-label">M2 · 排行榜为示例数据，暂未联网</p>
     </section>
@@ -96,17 +98,18 @@
 
   <dialog id="leaderboard-dialog" class="leaderboard-dialog" aria-labelledby="leaderboard-title">
     <div class="dialog-heading"><div><p class="eyebrow">无限畅玩 · 每人最高分</p><h2 id="leaderboard-title">山间风云榜</h2></div><button class="dialog-close" data-close aria-label="关闭排行榜">×</button></div>
-    <div class="preview-notice"><span class="notice-dot"></span>示例榜单 · 联网尚未接入</div>
+    <div id="leaderboard-status" class="preview-notice"><span class="notice-dot"></span>示例榜单 · 联网尚未接入</div>
     <div class="ranking-columns" aria-hidden="true"><span>名次 / 玩家</span><span>最高积分</span></div>
     <ol id="ranking-list" class="ranking-list" aria-label="示例排行榜"></ol>
     <div id="my-rank" class="my-rank">你还没有上榜，来合成第一只萌兽吧。</div>
+    <button id="ranking-retry" class="secondary" hidden>重新连接排行榜</button>
     <form id="ranking-form" novalidate>
       <div class="submit-heading"><span>本局可提交积分</span><strong id="ranking-score">0</strong></div>
       <label for="nickname">你的昵称 <small>1—12 个字</small></label>
       <div class="submit-row"><input id="nickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="给自己起个名字" aria-describedby="ranking-feedback"><button id="submit-score" class="primary" type="submit" disabled>模拟提交</button></div>
       <p id="ranking-feedback" class="ranking-feedback" role="status">先合成获得积分，再提交本局成绩。</p>
     </form>
-    <p class="dialog-footnote">示例玩家与模拟提交仅保留在当前页面，刷新即重置。真实共享排行榜尚未接入。</p>
+    <p id="ranking-footnote" class="dialog-footnote">示例玩家与模拟提交仅保留在当前页面，刷新即重置。真实共享排行榜尚未接入。</p>
   </dialog>
 
   <dialog id="restart-dialog" class="restart-dialog" aria-labelledby="restart-title">
@@ -119,7 +122,7 @@
     <div class="dialog-heading"><div><p class="eyebrow">M2 · 无限畅玩</p><h2 id="info-title">无限畅玩</h2></div><button class="dialog-close" data-close aria-label="关闭说明">×</button></div>
     <p>体力与三种道具均可无限使用。移除一只：点选场内萌兽；换下一只：切换当前待投放动物；摇一摇：让场内萌兽重新滚动。道具本身不扣分，摇动产生的正常合成可得分。</p>
     <p>以上为本版道具效果。原版视频未展示完整道具效果。动物画面、下落速度沿用已确认的 M1-R2，碰撞与得分仍是演示参数。</p>
-    <p>排行榜当前使用示例数据，模拟提交仅在本页面内存中保留。朋友间共享成绩与长期保存尚未接入。</p>
+    <p id="ranking-info-text">排行榜当前使用示例数据，模拟提交仅在本页面内存中保留。朋友间共享成绩与长期保存尚未接入。</p>
     <a class="reference-link" href="https://www.bilibili.com/video/BV1pqhSeSE9M" target="_blank" rel="noreferrer">查看完整参考视频 ↗</a>
   </dialog>
 </body>
