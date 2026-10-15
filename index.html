@@ -1,95 +1,125 @@
 <!doctype html>
-<html lang="zh-CN" data-prototype-revision="M1-R2">
+<html lang="zh-CN" data-prototype-revision="M2" data-asset-revision="M1-R2">
 <head>
   <meta charset="utf-8">
+  <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#244f46">
-  <meta name="description" content="神龙消消乐首轮界面与合成演示，支持手机触屏和电脑鼠标。">
-  <title>神龙消消乐 · M1-R2</title>
+  <meta name="robots" content="noindex,nofollow">
+  <title>神龙消消乐 · M2 无限畅玩</title>
   <link rel="stylesheet" href="style.css?v=m1-r2">
+  <link rel="stylesheet" href="m2/style.css?v=m2-r2">
   <script src="animals.js?v=m1-r2" defer></script>
   <script src="scene.js?v=m1-r2" defer></script>
-  <script src="app.js?v=m1-r2" defer></script>
+  <script src="m2/mode.js?v=m2-r2" defer></script>
+  <script src="m2/items.js?v=m2-r2" defer></script>
+  <script src="m2/leaderboard.js?v=m2-r2" defer></script>
+  <script src="m2/app.js?v=m2-r2" defer></script>
 </head>
 <body>
-  <div class="page-heading"><span class="seal">龙</span><span>神龙消消乐</span><span class="edition">首轮界面演示 · M1-R2</span></div>
+  <div class="page-heading"><span class="seal">龙</span><span>神龙消消乐</span><span class="edition">M2 · 无限畅玩</span></div>
   <main class="layout">
     <aside class="intro desktop-only">
-      <p class="eyebrow">山间有萌兽</p>
-      <h1>让小动物<br>一路长成<br><span>神龙。</span></h1>
-      <p class="intro-copy">选一个落点，放下一只萌兽。<br>同类相遇，合成更大的伙伴。</p>
-      <div class="ink-rule"></div>
-      <div class="howto"><span>一</span><p>左右移动，选择落点</p></div>
-      <div class="howto"><span>二</span><p>点击或松手，放下萌兽</p></div>
-      <div class="howto"><span>三</span><p>同类合成，向龙神珠进发</p></div>
-      <p class="keyboard-hint">电脑也可用 ← → 调整落点<br>空格投放 · P 暂停</p>
-      <details class="source-note"><summary>本版参考与实现程度</summary><p>动物与山水取自你提供的视频帧，仅供本轮界面评审。图片保留原版画面，尚未取得独立透明精灵。碰撞、体力和分数为演示值，图鉴为本版合成链展示。</p><a href="https://www.bilibili.com/video/BV1pqhSeSE9M" target="_blank" rel="noreferrer">查看原版参考视频 ↗</a></details>
+      <p class="eyebrow">山间有萌兽 · 尽兴玩一局</p>
+      <h1>慢慢合成，<br><span>一直玩。</span></h1>
+      <p class="intro-copy">体力和道具都已放开。<br>为小动物腾个位置，再向神龙前进。</p>
+      <div class="free-note"><b>∞</b><div>无限体力 · 无限道具<small>所有玩家采用相同畅玩规则</small></div></div>
+      <section class="mini-board" aria-labelledby="mini-board-title">
+        <div class="mini-board-heading"><h3 id="mini-board-title">山间风云榜</h3><span>示例</span></div>
+        <ol id="mini-ranks"></ol>
+        <button id="side-leaderboard" class="subtle-button">查看完整榜单 ↗</button>
+      </section>
+      <p class="keyboard-hint">← → 选落点 · 空格投放 · P 暂停<br>移除时点选萌兽，Esc 取消</p>
+      <button id="side-source" class="subtle-button">玩法说明与参考 ↗</button>
+      <a class="previous-link" href="index-m1-r2.html">查看首轮试玩</a>
     </aside>
 
-    <section class="game" aria-label="神龙消消乐界面演示">
+    <section class="game" aria-label="神龙消消乐无限畅玩">
       <header class="game-heading">
-        <div><p class="tiny-heading">萌兽合成</p><h2>召唤神龙</h2></div>
-        <div class="heading-actions"><button id="sound-info" class="round-button" aria-label="音效说明" title="音效说明">♫</button><button id="pause" class="round-button" aria-label="暂停游戏" title="暂停">Ⅱ</button></div>
+        <div><p class="tiny-heading">萌兽合成 · 无限畅玩</p><h2>召唤神龙</h2></div>
+        <div class="heading-actions">
+          <button id="leaderboard" class="round-button rank-button" aria-label="打开排行榜" title="排行榜"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v5c0 4-2 6-5 6s-5-2-5-6V4ZM7 6H4v3c0 2 2 3 4 3m9-6h3v3c0 2-2 3-4 3M12 15v5m-4 0h8"/></svg></button>
+          <button id="pause" class="round-button" aria-label="暂停游戏" title="暂停">Ⅱ</button>
+        </div>
       </header>
       <div class="scorebar">
         <div class="score"><span>本局积分</span><strong id="score">0</strong></div>
-        <div class="round-meta"><span>最高 <b id="best">0</b></span><span>体力 <b id="stamina">100</b><small>/100</small></span></div>
+        <div class="round-meta"><span>最高 <b id="best">0</b></span><span class="infinite-stamina">体力 <b id="stamina" aria-label="无限">∞</b><small>无限</small></span></div>
         <div class="next-beast"><span>下一只</span><canvas id="next-animal" width="58" height="58" aria-label="下一只动物"></canvas></div>
       </div>
       <div class="arena" id="arena">
-        <canvas id="game-canvas" width="394" height="560" tabindex="0" aria-label="左右拖动选择落点，松手投放。也可用左右方向键和空格。"></canvas>
-        <div class="arena-label">界面与合成演示</div>
-        <div class="line-label">停止线</div>
+        <canvas id="game-canvas" width="394" height="560" tabindex="0" aria-label="左右拖动选择落点，松手投放；移除模式下点选一只萌兽。"></canvas>
+        <div class="arena-label">M2 · 无限畅玩</div><div class="line-label">停止线</div>
         <div class="drop-hint" id="drop-hint">左右拖动 · 松手投放</div>
         <div class="combo" id="combo" aria-live="polite"></div>
+        <div id="item-hint" class="item-hint" hidden><span>点选一只萌兽移除</span><button id="cancel-item">取消</button></div>
         <div class="pause-overlay" id="pause-overlay" hidden><span>稍歇片刻</span><button id="resume" class="primary">继续游玩</button></div>
         <div class="load-error" id="load-error" hidden>参考图片加载失败，请重新打开页面。</div>
       </div>
       <div class="game-footer">
         <div class="play-row"><span id="current-name">等待萌兽</span><button id="drop" class="primary drop-button">放下萌兽 <span>↓</span></button></div>
-        <nav class="demo-tools" aria-label="原型演示入口">
-          <button id="merge-demo"><span class="tool-icon">✦</span>合成演示</button>
-          <button id="catalog"><span class="tool-icon">卷</span>萌兽图鉴</button>
-          <button id="line-demo"><span class="tool-icon">⌁</span>超线提示</button>
-          <button id="restart"><span class="tool-icon">↺</span>重新开始</button>
+        <nav class="item-tools" aria-label="无限道具">
+          <button id="item-remove" aria-pressed="false"><span class="item-symbol">⌖</span><span>移除一只</span><b aria-label="无限次">∞</b></button>
+          <button id="item-swap"><span class="item-symbol">⇄</span><span>换下一只</span><b aria-label="无限次">∞</b></button>
+          <button id="item-shake"><span class="item-symbol">〰</span><span>摇一摇</span><b aria-label="无限次">∞</b></button>
         </nav>
+        <nav class="quick-tools" aria-label="游戏菜单"><button id="catalog">萌兽图鉴</button><button id="footer-leaderboard">排行榜 <span>示例</span></button><button id="restart">重新开始</button></nav>
       </div>
-      <p class="prototype-label">动物为原版视频截帧参考 · 数值为演示值</p>
+      <p class="prototype-label">M2 · 排行榜为示例数据，暂未联网</p>
     </section>
 
     <aside class="chain-panel desktop-only">
       <div class="panel-title"><span class="eyebrow">十一种相遇</span><h3>萌兽的进阶之路</h3></div>
       <div id="side-chain" class="side-chain"></div>
       <div class="orb-note"><span>✧</span><p>合成龙神珠后<br><strong>还可以继续这一局</strong></p></div>
-      <button class="subtle-button" id="side-source">查看本版说明 ↗</button>
+      <p class="source-caption">沿用已确认的动物画面与下落速度</p>
     </aside>
   </main>
-
   <div id="toast" class="toast" role="status" hidden></div>
 
   <dialog id="catalog-dialog" class="catalog-dialog" aria-labelledby="catalog-title">
     <div class="dialog-heading"><div><p class="eyebrow">相同萌兽，逐级相遇</p><h2 id="catalog-title">萌兽图鉴</h2></div><button class="dialog-close" data-close aria-label="关闭图鉴">×</button></div>
-    <p class="dialog-intro">点击一种萌兽，看两只同类合成的效果。</p>
+    <p class="dialog-intro">从小鸟到龙神珠。场内同类接触后会合成下一级。</p>
     <div class="catalog-grid" id="catalog-grid"></div>
-    <p class="dialog-footnote">原版视频截帧参考。前三种暂用类别名；本面板是评审用合成链，并非原版图鉴页面。</p>
+    <p class="dialog-footnote">动物画面取自原版视频。龙神珠的体型沿用视频参考。</p>
   </dialog>
 
   <dialog id="stop-dialog" class="stop-dialog" aria-labelledby="stop-title">
     <div class="dialog-heading"><span class="eyebrow">萌兽有点挤了</span><button class="dialog-close" data-close aria-label="关闭提示">×</button></div>
     <div class="overflow-illustration"><canvas id="stop-portrait" width="104" height="104" aria-label="小虎"></canvas><span>！</span></div>
-    <h2 id="stop-title">超过停止线了</h2>
-    <p>先停一停，让小动物们腾个位置。</p>
-    <button class="primary" id="continue-item">使用道具继续</button>
-    <button class="secondary" id="stop-restart">重新开始</button>
-    <p class="dialog-footnote">本版展示原版的超线反馈。道具效果待核对。</p>
+    <h2 id="stop-title">腾个位置，再继续</h2>
+    <p>本局 <strong id="stop-score">0</strong> 分<br>清理顶部萌兽，保留积分继续玩。</p>
+    <button class="primary" id="continue-item">清理顶部并继续 <b>∞</b></button>
+    <button class="secondary" id="stop-leaderboard">看看排行榜</button>
+    <button class="text-button" id="stop-restart">重新开始</button>
+  </dialog>
+
+  <dialog id="leaderboard-dialog" class="leaderboard-dialog" aria-labelledby="leaderboard-title">
+    <div class="dialog-heading"><div><p class="eyebrow">无限畅玩 · 每人最高分</p><h2 id="leaderboard-title">山间风云榜</h2></div><button class="dialog-close" data-close aria-label="关闭排行榜">×</button></div>
+    <div class="preview-notice"><span class="notice-dot"></span>示例榜单 · 联网尚未接入</div>
+    <div class="ranking-columns" aria-hidden="true"><span>名次 / 玩家</span><span>最高积分</span></div>
+    <ol id="ranking-list" class="ranking-list" aria-label="示例排行榜"></ol>
+    <div id="my-rank" class="my-rank">你还没有上榜，来合成第一只萌兽吧。</div>
+    <form id="ranking-form" novalidate>
+      <div class="submit-heading"><span>本局可提交积分</span><strong id="ranking-score">0</strong></div>
+      <label for="nickname">你的昵称 <small>1—12 个字</small></label>
+      <div class="submit-row"><input id="nickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="给自己起个名字" aria-describedby="ranking-feedback"><button id="submit-score" class="primary" type="submit" disabled>模拟提交</button></div>
+      <p id="ranking-feedback" class="ranking-feedback" role="status">先合成获得积分，再提交本局成绩。</p>
+    </form>
+    <p class="dialog-footnote">示例玩家与模拟提交仅保留在当前页面，刷新即重置。真实共享排行榜尚未接入。</p>
+  </dialog>
+
+  <dialog id="restart-dialog" class="restart-dialog" aria-labelledby="restart-title">
+    <div class="dialog-heading"><h2 id="restart-title">重新开始这一局？</h2><button class="dialog-close" data-close aria-label="取消重开">×</button></div>
+    <p>本局积分将归零。需要的话，可先在排行榜预览中记录成绩。</p>
+    <button id="confirm-restart" class="primary">重新开始</button><button id="cancel-restart" class="secondary">继续这一局</button>
   </dialog>
 
   <dialog id="info-dialog" class="info-dialog" aria-labelledby="info-title">
-    <div class="dialog-heading"><div><p class="eyebrow">首轮前端 · M1-R2</p><h2 id="info-title">这版可以体验什么</h2></div><button class="dialog-close" data-close aria-label="关闭说明">×</button></div>
-    <p>拖动或点击场景选择落点，松手投放；同类接触后演示升级。可查看11级合成链、暂停、重开，以及超线提示。</p>
-    <p>动物和山水使用原版视频参考画面。原始透明素材尚未取得，裁切区域可能带原画背景，清晰度受视频影响。</p>
-    <p>本版碰撞、得分、体力及停止线计时为演示参数。尚未实现原版道具、音效、存档、排行榜或上线。</p>
+    <div class="dialog-heading"><div><p class="eyebrow">M2 · 无限畅玩</p><h2 id="info-title">无限畅玩</h2></div><button class="dialog-close" data-close aria-label="关闭说明">×</button></div>
+    <p>体力与三种道具均可无限使用。移除一只：点选场内萌兽；换下一只：切换当前待投放动物；摇一摇：让场内萌兽重新滚动。道具本身不扣分，摇动产生的正常合成可得分。</p>
+    <p>以上为本版道具效果。原版视频未展示完整道具效果。动物画面、下落速度沿用已确认的 M1-R2，碰撞与得分仍是演示参数。</p>
+    <p>排行榜当前使用示例数据，模拟提交仅在本页面内存中保留。朋友间共享成绩与长期保存尚未接入。</p>
     <a class="reference-link" href="https://www.bilibili.com/video/BV1pqhSeSE9M" target="_blank" rel="noreferrer">查看完整参考视频 ↗</a>
   </dialog>
 </body>

@@ -1,23 +1,23 @@
 <!doctype html>
-<html lang="zh-CN" data-prototype-revision="M2-preview" data-asset-revision="M1-R2">
+<html lang="zh-CN" data-prototype-revision="M2" data-asset-revision="M1-R2">
 <head>
   <meta charset="utf-8">
   <base href="../">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#244f46">
   <meta name="robots" content="noindex,nofollow">
-  <title>神龙消消乐 · 无限畅玩预览</title>
+  <title>神龙消消乐 · M2 无限畅玩</title>
   <link rel="stylesheet" href="style.css?v=m1-r2">
-  <link rel="stylesheet" href="m2/style.css?v=m2-r1">
+  <link rel="stylesheet" href="m2/style.css?v=m2-r2">
   <script src="animals.js?v=m1-r2" defer></script>
   <script src="scene.js?v=m1-r2" defer></script>
-  <script src="m2/mode.js?v=m2-r1" defer></script>
-  <script src="m2/items.js?v=m2-r1" defer></script>
-  <script src="m2/leaderboard.js?v=m2-r1" defer></script>
-  <script src="m2/app.js?v=m2-r1" defer></script>
+  <script src="m2/mode.js?v=m2-r2" defer></script>
+  <script src="m2/items.js?v=m2-r2" defer></script>
+  <script src="m2/leaderboard.js?v=m2-r2" defer></script>
+  <script src="m2/app.js?v=m2-r2" defer></script>
 </head>
 <body>
-  <div class="page-heading"><span class="seal">龙</span><span>神龙消消乐</span><span class="edition">M2 · 无限畅玩预览</span></div>
+  <div class="page-heading"><span class="seal">龙</span><span>神龙消消乐</span><span class="edition">M2 · 无限畅玩</span></div>
   <main class="layout">
     <aside class="intro desktop-only">
       <p class="eyebrow">山间有萌兽 · 尽兴玩一局</p>
@@ -30,11 +30,11 @@
         <button id="side-leaderboard" class="subtle-button">查看完整榜单 ↗</button>
       </section>
       <p class="keyboard-hint">← → 选落点 · 空格投放 · P 暂停<br>移除时点选萌兽，Esc 取消</p>
-      <button id="side-source" class="subtle-button">本轮说明与参考 ↗</button>
-      <a class="previous-link" href="./">返回已发布版</a>
+      <button id="side-source" class="subtle-button">玩法说明与参考 ↗</button>
+      <a class="previous-link" href="index-m1-r2.html">查看首轮试玩</a>
     </aside>
 
-    <section class="game" aria-label="神龙消消乐无限畅玩预览">
+    <section class="game" aria-label="神龙消消乐无限畅玩">
       <header class="game-heading">
         <div><p class="tiny-heading">萌兽合成 · 无限畅玩</p><h2>召唤神龙</h2></div>
         <div class="heading-actions">
@@ -65,7 +65,7 @@
         </nav>
         <nav class="quick-tools" aria-label="游戏菜单"><button id="catalog">萌兽图鉴</button><button id="footer-leaderboard">排行榜 <span>示例</span></button><button id="restart">重新开始</button></nav>
       </div>
-      <p class="prototype-label">M2 评审预览 · 排行榜为示例数据，暂未联网</p>
+      <p class="prototype-label">M2 · 排行榜为示例数据，暂未联网</p>
     </section>
 
     <aside class="chain-panel desktop-only">
@@ -106,7 +106,7 @@
       <div class="submit-row"><input id="nickname" name="nickname" maxlength="24" autocomplete="nickname" placeholder="给自己起个名字" aria-describedby="ranking-feedback"><button id="submit-score" class="primary" type="submit" disabled>模拟提交</button></div>
       <p id="ranking-feedback" class="ranking-feedback" role="status">先合成获得积分，再提交本局成绩。</p>
     </form>
-    <p class="dialog-footnote">此页用于确认排行榜界面。示例玩家与模拟提交仅保留在当前页面，刷新即重置；确认后接入朋友间共享的真实成绩。</p>
+    <p class="dialog-footnote">示例玩家与模拟提交仅保留在当前页面，刷新即重置。真实共享排行榜尚未接入。</p>
   </dialog>
 
   <dialog id="restart-dialog" class="restart-dialog" aria-labelledby="restart-title">
@@ -116,10 +116,10 @@
   </dialog>
 
   <dialog id="info-dialog" class="info-dialog" aria-labelledby="info-title">
-    <div class="dialog-heading"><div><p class="eyebrow">第二轮前端 · M2</p><h2 id="info-title">无限畅玩预览</h2></div><button class="dialog-close" data-close aria-label="关闭说明">×</button></div>
+    <div class="dialog-heading"><div><p class="eyebrow">M2 · 无限畅玩</p><h2 id="info-title">无限畅玩</h2></div><button class="dialog-close" data-close aria-label="关闭说明">×</button></div>
     <p>体力与三种道具均可无限使用。移除一只：点选场内萌兽；换下一只：切换当前待投放动物；摇一摇：让场内萌兽重新滚动。道具本身不扣分，摇动产生的正常合成可得分。</p>
-    <p>以上道具效果为本轮提案。原版视频未展示完整道具效果。动物画面、下落速度沿用已确认的 M1-R2，碰撞与得分仍是演示参数。</p>
-    <p>排行榜展示共享榜的拟定操作，当前用示例数据，模拟提交仅在本页面内存中保留。账号、联网成绩与持久化待本轮界面确认后实现。</p>
+    <p>以上为本版道具效果。原版视频未展示完整道具效果。动物画面、下落速度沿用已确认的 M1-R2，碰撞与得分仍是演示参数。</p>
+    <p>排行榜当前使用示例数据，模拟提交仅在本页面内存中保留。朋友间共享成绩与长期保存尚未接入。</p>
     <a class="reference-link" href="https://www.bilibili.com/video/BV1pqhSeSE9M" target="_blank" rel="noreferrer">查看完整参考视频 ↗</a>
   </dialog>
 </body>
