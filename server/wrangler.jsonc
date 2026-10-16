@@ -4,11 +4,15 @@
   "main": "src/index.js",
   "compatibility_date": "2026-10-15",
   "workers_dev": true,
-  "vars": { "ALLOWED_ORIGIN": "https://guanzigong-agent.github.io" },
-  "d1_databases": [{
-    "binding": "DB",
-    "database_name": "dragon-merge-leaderboard",
-    "database_id": "REPLACE_WITH_DATABASE_ID",
-    "migrations_dir": "migrations"
-  }]
+  "vars": {
+    "ALLOWED_ORIGIN": "https://guanzigong-agent.github.io"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dragon-merge-leaderboard",
+      "database_id": "06b3a04a-a2cb-456b-bebd-27a36407f664",
+      "migrations_dir": "migrations"
+    }
+  ]
 }
